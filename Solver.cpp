@@ -157,29 +157,17 @@ bool Solver::a_star_algorithm(){
    priority_queue < mypair > boardQueue;  //priority queue stores boards and their scores.
    queue<Board> path;            //queue stores the path from initial state to goal state.
    bool solvable = true ;     //tells whether the problem is solvable or not.
-
-   ofstream myfile;                       //output file (ostream)
-   myfile.open ("A_STAR TRACE_OUTPUT");   //Text file is opened and trace output is stored in it.
-
    int startBoardScore ;         //initialboard score.
    initstate.depth = 0;          //initialboard depth.
    startBoardScore = initstate.heuristic_val(heuristic) ;
    boardQueue.push( pair<int,Board>(startBoardScore,initstate) );
 
-    myfile<<"depth "<<initstate.depth<<endl;
-    myfile<<"initScore: "<<startBoardScore<<endl;
-
-    Board goalstate;  //goalState.
+   Board goalstate;  //goalState.
 
     while(1){
-      myfile<<"multimap size: "<<moves.size()<<endl;
       Board b;
-       b = boardQueue.top().second ;  //taking the best prefered and processing it.
+      b = boardQueue.top().second ;  //taking the best prefered and processing it.
       boardQueue.pop() ;    //poping the procesed board configuration.
-      int score = b.depth + b.heuristic_val(heuristic) ;
-
-      myfile<<"depth "<<b.depth<<endl;
-      myfile<<"score: "<<score<<endl;
 
       if(b.heuristic_val(heuristic) == 0){
          goalstate = b;
@@ -195,8 +183,6 @@ bool Solver::a_star_algorithm(){
       queue<Board> newMoves;   //newmoves is the queue returned from generateMoves.
       newMoves = generateMoves(b,heuristic,moves);
 
-      myfile<<"total children: "<<newMoves.size()<<endl;
-
       while(!newMoves.empty()){         //till newmoves becomes empty.
 
          Board move;
@@ -207,22 +193,9 @@ bool Solver::a_star_algorithm(){
          int score ;
          score = move.depth + move.heuristic_val(heuristic);
 
-         //printing the child to the trace output
-         myfile<<"child score: "<<score<<endl;
-         for (int i = 0; i < N; i++){
-            for (int j = 0; j < N; j++)
-               myfile << move.getBoardVal(i,j)<< ' ';
-               myfile << endl;
-            }
-            myfile << endl;
-
          boardQueue.push( pair<int,Board>(score,move) );  //pushing the move into the priority queue.
       }
    }
-
-   myfile<<"found the solution"<<endl;
-   myfile<<"output printing"<<endl;
-
 
    //These are used to back track the path from the path direction stored in the
    //queue of the goal state.
@@ -246,8 +219,7 @@ bool Solver::a_star_algorithm(){
         goalstate.direction.pop();
     }
 
-    solution_steps = path;
-    myfile.close();    //file is closed.
+   solution_steps = path;
    return solvable;
 }
 
@@ -281,7 +253,7 @@ bool Solver::ida_star_algorithm(){
       solution_steps = pr.first;
       break;
     }
-    else if(cost_limit > 30) return false;
+    else if(cost_limit > 35) return false;
     else continue;//searching again with updated cost_limit
   }
   return true;

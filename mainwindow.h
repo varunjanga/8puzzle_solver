@@ -58,6 +58,8 @@ private slots:
     */
     void on_pushButton_nextMove_clicked();                  //NextMove button handler
 
+    void on_pushButton_help_clicked();
+
 private:
     int N;                                      //Board size
     Ui::MainWindow *ui;                         //MainWindow object pointer represents the Window
@@ -75,7 +77,7 @@ private:
     QGraphicsPixmapItem *pixItem[16];       //PixmapItem objects for Pixmap objects
     QGraphicsItemAnimation *animation[16] ; //Animation objects which animates the PixmapItem object with timer
 
-    /*
+    /**
     move :Helper function for NextMove which shows Animation for Sliding an image
     */
     void move(int x,int y,int xshift,int yshift,int index); //helper function for NextMove button handler

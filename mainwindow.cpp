@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <stdlib.h>
-#include <ctime>
+#include <sys/time.h>
 
 QString convertInt(int number);
 
@@ -16,12 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
     timer = new QTimeLine;
     QMessageBox::information(this,
                              "Welcome!!",
-                             "    Welcome to 8puzzle Solver.\n\nNote:\nIn 3x3, The Goal State for Hammimg,\n  Manhattan and Euclidean Heuristics is\n          1 2 3\n          4 5 6\n          7 8 0\n  whereas for NilsonScore and Blank it is\n          1 2 3\n          8 0 4\n          7 6 5\n\nIn 4x4,The Goal State for provided heuristics is\n            1  2  3  4\n            5  6  7  8\n            9 10 11 12\n           13 14 15  0");
+                             "    Welcome to 8puzzle Solver.\n        Click Help for usage.");
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    
 }
 
 /*************************Solve Button Handler*********************
@@ -84,15 +85,15 @@ void MainWindow::on_pushButton_clicked()
         timer2->setFrameRange(0, 1000);
         timer2->start();
 */
-        time_t start,end; //= clock();
-        time(&start);
+				struct timeval t_start, t_end;
+				gettimeofday(&t_start, NULL);
         pair<bool,queue<Board> > temp_pr = (solver->solve());
-        time(&end);
-        //int end_ = clock();
+        gettimeofday(&t_end, NULL);
 
-        //qDebug() << difftime(end,start);
         QString timeStr = "Time taken: ";
-        timeStr += convertInt((difftime(end,start))) + " seconds";
+        double tot_loop_time = (t_end.tv_sec - t_start.tv_sec) + (t_end.tv_usec - t_start.tv_usec)/1000000.0f;
+        timeStr += QString::number(tot_loop_time) + " seconds";
+        //timeStr += difftime(end,start) + " seconds";
         QMessageBox::information(this,"Time",timeStr);
 
         if(temp_pr.first){
@@ -127,9 +128,13 @@ void MainWindow::on_pushButton_clicked()
                 QMessageBox::information(
                             this,
                             "Error",
-                            "Searched till depth 30\nIt is not be solvable.\n           or\nOur efficiency has to be improved");
+                            "         Taking too long.\nOur efficiency has to be improved");
         }
     }
+}
+
+bool is_wspace(QCharRef c){
+	return c == ' ' || c == '\n';
 }
 
 //Parses the input string into 2d array
@@ -139,13 +144,13 @@ bool MainWindow::parseInput(QString input_string, int **tiles)
     if (input_string.size() == 0) return false;
     for (int i = 0; i < N; i++)
       for (int j = 0; j < N; j++){
-          while(input_string[count] == ' ') {
+          while(is_wspace(input_string[count])) {
               count++;
               if(count >= input_string.size())
                   return false;
           }
           int temp = 0;
-          while(input_string[count] != ' '){
+          while(!is_wspace(input_string[count])){
               temp = 10*temp + (input_string[count].toAscii()-48);
               count++;
               if (count == input_string.size()){
@@ -318,4 +323,11 @@ void MainWindow::on_pushButton_nextMove_clicked()
             }
         }
     }
+}
+
+void MainWindow::on_pushButton_help_clicked()
+{
+    QMessageBox::information(this,
+                             "Help Content",
+                             "Sample input for the following puzzle is '1 2 3 4 5 6 0 7 8' \n          1 2 3\n          4 5 6\n          _ 7 8\n\n In 3x3, The Goal State for Hammimg,\n    Manhattan and Euclidean Heuristics is\n          1 2 3\n          4 5 6\n          7 8 0\n    whereas for NilsonScore and Blank it is\n          1 2 3\n          8 0 4\n          7 6 5\n\nIn 4x4,The Goal State for provided heuristics is\n            1  2  3  4\n            5  6  7  8\n            9 10 11 12\n           13 14 15  0");
 }

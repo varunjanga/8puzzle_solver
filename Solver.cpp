@@ -1,5 +1,6 @@
 #include "Solver.h"
 #include <cstring>
+#define COST_LIMIT 35
 
 typedef pair<int,Board> mypair;
 bool operator<(const mypair& e1, const mypair& e2) {
@@ -253,7 +254,7 @@ bool Solver::ida_star_algorithm(){
       solution_steps = pr.first;
       break;
     }
-    else if(cost_limit > 35) return false;
+    else if(cost_limit > COST_LIMIT) return false;
     else continue;//searching again with updated cost_limit
   }
   return true;

@@ -38,18 +38,23 @@ NOTE
 Setup and Running
 ------------------------------------------------------------------------
 
-1.Install Qt (The following installs Qt-IDE.)
-  sudo apt-get install qtcreator
-
-2.Uninstall qt-at-spi
-  (Found that this was leading to some errors so I removed it)
-  sudo apt-get remove qt-at-spi
+1.Install Qt.
+  Method-1: (Use this if you want to develop code in Qt-IDE)
+    sudo apt-get install qtcreator
+    (Found that qt-at-spi was leading to some errors so I removed it)
+    sudo apt-get remove qt-at-spi 
+    
+  Method 2: Run the following commands(if u dont want IDE)
+    sudo apt-get install libqt4-dev
+    sudo apt-get install qmake
 
 3.Run the command 
   qmake && make
   
 4.Now you can start the program with the executable
   ./8puzzle
+  
+  Our observation IDA* with Hamming was giving the fastest output.
 
 ------------------------------------------------------------------------
 Developed by

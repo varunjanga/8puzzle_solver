@@ -59,5 +59,5 @@ Setup and Running
 ------------------------------------------------------------------------
 Developed by
 ------------------------------------------------------------------------
-1.Janga Varun - varunjanga[at]gmail[dot]com
-2.T Pradeep Kumar - pradeep170993[at]gmail[dot]com
+1.Janga Varun
+2.T Pradeep Kumar
